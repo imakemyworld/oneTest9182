@@ -1,7 +1,7 @@
 <template>
   <div id="333" class="testDiv">
     <div class="navDiv">
-      <custom-menu :menuData="menuData" />
+      <custom-menu :menuData="menuData" @rootClick="rootClick" />
     </div>
     <div class="content">测试内容</div>
   </div>
@@ -14,9 +14,24 @@ export default {
     "custom-menu": customMenu,
   },
   name: "navView",
-  methods: {},
-  watch: {
+  methods: {
+    rootClick(clickData) {
+      if (!clickData.isActive) {
+        for (let data of this.menuData) {
+          if (data.isActive) {
+            this.$nextTick(() => {
+              data.isActive = false;
+            });
+          }
+        }
+        this.$nextTick(() => {
+          clickData.isActive = true;
+        });
+      }
+      this.$forceUpdate();
+    },
   },
+  watch: {},
   data() {
     return {
       menuData: [

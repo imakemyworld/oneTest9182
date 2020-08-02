@@ -22,19 +22,7 @@ export default {
   },
   methods: {
     rootClick(clickData) {
-      if (!clickData.isActive) {
-        for (let data of this.menuData) {
-          if (data.isActive) {
-            this.$nextTick(() => {
-              data.isActive = false;
-            });
-          }
-        }
-        this.$nextTick(() => {
-          clickData.isActive = true;
-        });
-      }
-      this.$forceUpdate();
+      this.$emit("rootClick", clickData);
     },
   },
   watch: {
