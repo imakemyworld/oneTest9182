@@ -1,11 +1,12 @@
 <template>
-  <li :class="root ? 'cu-item' : 'cu-pop-menu-li'">
-    <div
-      :class="titleClass"
-      @mouseenter="showMenuList"
-      @mouseleave="closeMenu"
-      @click="rootClick"
-    >{{data.label}}</div>
+  <li
+    :class="root ? 'cu-item' : 'cu-pop-menu-li'"
+    @mouseenter="showMenuList"
+    @mouseleave="closeMenu"
+    @mouseover="showMenuList"
+    @click="rootClick"
+  >
+    <div :class="titleClass">{{data.label}}</div>
     <MenuPop
       v-if="hasChild"
       :data="data"
@@ -32,16 +33,16 @@ export default {
     hasChild() {
       return this.data.children != null && this.data.children.length > 0;
     },
-    titleClass () {
+    titleClass() {
       return {
         "cu-pop-item-div": !this.root,
         "cu-item-div": this.root,
         "cu-subMenuDiv": this.hasChild,
         "cu-item-isActive": this.data.isActive,
         "cu-suMenuDivHover": this.root && this.showPop,
-        "cu-suNoH" : this.root && !this.showPop
+        "cu-suNoH": this.root && !this.showPop,
       };
-    }
+    },
   },
   methods: {
     openMenu() {
@@ -77,7 +78,7 @@ export default {
       if (!this.root) {
         return;
       }
-      this.$emit("rootClick",this.data);
+      this.$emit("rootClick", this.data);
     },
   },
   data() {
@@ -86,7 +87,7 @@ export default {
       showPop: false,
       popStyle: {
         top: 0,
-        left: 0
+        left: 0,
       },
     };
   },
