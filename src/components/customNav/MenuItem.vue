@@ -1,21 +1,9 @@
 <template>
-  <li
-    :class="root ? 'cu-item' : 'cu-pop-menu-li'"
-    @mouseenter="showMenuList"
-    @mouseleave="closeMenu"
-    @mouseover="showMenuList"
-    @click="rootClick"
-  >
+  <li :class="root ? 'cu-item' : 'cu-pop-menu-li'" @mouseenter="showMenuList" @mouseleave="closeMenu"
+    @mouseover="showMenuList" @click="liClick">
     <div :class="titleClass">{{data.label}}</div>
-    <MenuPop
-      v-if="hasChild"
-      :data="data"
-      :root="root"
-      :popStyle="popStyle"
-      v-show="showPop"
-      @childLeave="closeMenu"
-      @childEnter="openMenu"
-    />
+    <MenuPop v-if="hasChild" :data="data" :root="root" :popStyle="popStyle" v-show="showPop" @childLeave="closeMenu"
+      @childEnter="openMenu" @liClick="liClick" />
   </li>
 </template>
 
@@ -74,11 +62,15 @@ export default {
       }
       this.openMenu();
     },
-    rootClick() {
-      if (!this.root) {
-        return;
+    liClick(...args) {
+      if (args[0].stopPropagation) {
+        this.$emit("liClick", this.data, {
+          root: this.root,
+          event: args[0],
+        });
+      } else {
+        this.$emit("liClick", ...args);
       }
-      this.$emit("rootClick", this.data);
     },
   },
   data() {

@@ -1,12 +1,6 @@
 <template>
   <ul class="cu-menu">
-    <menu-item
-      v-for="child in menuData"
-      :key="child.id"
-      :data="child"
-      :root="true"
-      @rootClick="rootClick"
-    />
+    <menu-item v-for="child in menuData" :key="child.id" :data="child" :root="true" @liClick="liClick" />
   </ul>
 </template>
 
@@ -21,8 +15,8 @@ export default {
     menuData: Array,
   },
   methods: {
-    rootClick(clickData) {
-      this.$emit("rootClick", clickData);
+    liClick(...args) {
+      this.$emit("liClick", ...args);
     },
   },
   watch: {

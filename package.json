@@ -18,7 +18,7 @@
     "@vue/cli-plugin-eslint": "~4.4.0",
     "@vue/cli-service": "~4.4.0",
     "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
+    "eslint": "^7.6.0",
     "eslint-plugin-vue": "^6.2.2",
     "vue-template-compiler": "^2.6.11"
   },
@@ -38,9 +38,9 @@
       "no-console": "off",
       "no-debugger": "off",
       "generator-star-spacing": "off",
-      "no-tabs":"off",
-      "no-unused-vars":"off",
-      "no-irregular-whitespace":"off"
+      "no-tabs": "off",
+      "no-unused-vars": "off",
+      "no-irregular-whitespace": "off"
     }
   },
   "browserslist": [
