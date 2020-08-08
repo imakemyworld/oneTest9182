@@ -1,7 +1,8 @@
 <template>
   <div :class="popClass" :style="popStyle" @mouseenter="enterOpen" @mouseleave="leaveClose">
     <ul class="cu-pop-menu">
-      <menu-item v-for="child in data.children" :key="child.id" :data="child" :root="false" @liClick="liClick" />
+      <menu-item v-for="child in data.children" :key="child.id" :targetMenuOnce="false" :data="child" :root="false"
+        @liClick="liClick" />
     </ul>
   </div>
 </template>
@@ -46,6 +47,12 @@ export default {
     data: Object,
     root: Boolean,
     popStyle: Object,
+    option: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
   },
   mounted() {
     if (this.root && this.hasChild && !this.rootAppendToBody) {

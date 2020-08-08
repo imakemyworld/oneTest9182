@@ -1,8 +1,8 @@
 <template>
   <div class="custom-itemMenuDiv">
-    <div v-for="child in menuData" :key="child.id" :class="getCustomItemClass(child)"
-      :icon="changeToJSIcon(child.icon)">
-      <div :class="getCustomItemContentClass(child)" @click="editThis($event,child)">
+    <div v-for="child in menuData" :key="child.id" :class="getCustomItemClass(child)" :icon="changeToJSIcon(child.icon)"
+      :style="getCustomItemStyle(child)">
+      <div :class="getCustomItemContentClass(child)" @click="editThis($event,child)" :title="child.label">
         <span v-show="showInput(child,false)">{{child.label}}</span>
         <input type="text" class="editInput" v-if="child.editable" v-show="showInput(child,true)" v-model="child.label"
           @blur="quitEdit(child)" />
@@ -21,8 +21,17 @@ export default {
   name: "itemMenu",
   props: {
     menuData: Array,
+    option: Object,
   },
   computed: {},
+  directives: {
+    bindMenu: {
+      // 指令的定义
+      inserted: function (el) {
+        el.focus();
+      },
+    },
+  },
   methods: {
     quitEdit(item) {
       this.$set(this.isInput, item.id, false);
@@ -44,7 +53,8 @@ export default {
     getCustomItemContentClass(item) {
       return {
         "custom-item-content": true,
-        editable: item.editable === true,
+        editable: item.editable === true && this.isInput[item.id] != true,
+        editing: this.isInput[item.id] == true,
       };
     },
     getCustomItemClass(item) {
@@ -53,6 +63,15 @@ export default {
         isActive: item.isActive === true,
         disable: item.disable === true,
       };
+    },
+    getCustomItemStyle(item) {
+      let style = {};
+      if (this.option != null) {
+        if (this.option.columnNum > 0) {
+          style.width = "calc(" + 100.0 / this.option.columnNum + "% - 6px)"; //6px是margin的像素
+        }
+      }
+      return style;
     },
     changeToJSIcon(iconStr) {
       if (iconStr == null || iconStr.length == 0) {
@@ -153,9 +172,16 @@ export default {
   border-color: white;
   border-radius: 2px;
 }
+.custom-itemMenuDiv .custom-item-content.editing {
+  padding: 0px 1px;
+}
+
 .custom-itemMenuDiv .custom-item-content .editInput {
   width: calc(100% - 7px);
   border: none;
+  font-size: 13px;
+  font-family: "Microsoft YaHei";
+  outline: none;
 }
 .custom-itemMenuDiv .custom-item-content .editInput:focus {
   border: none;

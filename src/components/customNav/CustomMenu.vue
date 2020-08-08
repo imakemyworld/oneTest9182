@@ -1,7 +1,8 @@
 <template>
-  <ul class="cu-menu">
+  <ul class="cu-menu" v-if="option.targetMenu != true">
     <menu-item v-for="child in menuData" :key="child.id" :data="child" :root="true" @liClick="liClick" />
   </ul>
+  <menu-item v-else :data="menuData" :option="option" :targetMenuOnce="true" :root="false" @liClick="liClick" />
 </template>
 
 <script>
@@ -13,12 +14,19 @@ export default {
   name: "customMenu",
   props: {
     menuData: Array,
+    option: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
   },
   methods: {
     liClick(...args) {
       this.$emit("liClick", ...args);
     },
   },
+  mounted() {},
   watch: {
     // showPop(n,o){
     //  // if (this.appendToBody) document.body.appendChild(this.popperElm);

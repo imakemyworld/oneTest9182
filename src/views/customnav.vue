@@ -4,7 +4,7 @@
       <custom-menu :menuData="menuData" @liClick="liClick" />
     </div>
     <div class="content">
-      <custom-itemMenu :menuData="itemMenuData" />
+      <custom-itemMenu :menuData="itemMenuData" :option="opt" />
     </div>
   </div>
 </template>
@@ -86,6 +86,10 @@ export default {
       },
     ];
     return {
+      opt: {
+        columnNum: 3, //每行显示列数
+        useMenu: true,
+      },
       itemMenuData: [
         {
           id: "121",

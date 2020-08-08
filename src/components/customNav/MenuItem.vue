@@ -1,10 +1,12 @@
 <template>
-  <li :class="root ? 'cu-item' : 'cu-pop-menu-li'" @mouseenter="showMenuList" @mouseleave="closeMenu"
-    @mouseover="showMenuList" @click="liClick">
+  <li v-if="option.targetMenu != true || !targetMenuOnce" :class="root ? 'cu-item' : 'cu-pop-menu-li'"
+    @mouseenter="showMenuList" @mouseleave="closeMenu" @mouseover="showMenuList" @click="liClick">
     <div :class="titleClass">{{data.label}}</div>
     <MenuPop v-if="hasChild" :data="data" :root="root" :popStyle="popStyle" v-show="showPop" @childLeave="closeMenu"
       @childEnter="openMenu" @liClick="liClick" />
   </li>
+  <MenuPop v-else :data="data" :root="root" :popStyle="popStyle" v-show="showPop" @childLeave="closeMenu"
+    @childEnter="openMenu" @liClick="liClick" />
 </template>
 
 <script>
@@ -85,6 +87,13 @@ export default {
   },
   props: {
     data: Object,
+    option: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+    targetMenuOnce: Boolean,
     root: Boolean,
   },
   mounted() {
