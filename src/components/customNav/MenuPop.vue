@@ -25,7 +25,6 @@ export default {
       };
     },
   },
-  watch: {},
   methods: {
     leaveClose() {
       this.$emit("childLeave", false);
@@ -36,6 +35,12 @@ export default {
     liClick(...args) {
       this.$emit("liClick", ...args);
     },
+    appendToBody() {
+      var that = this;
+      this.$nextTick(function () {
+        document.body.appendChild(that.$el);
+      });
+    },
   },
   data() {
     return {
@@ -44,7 +49,18 @@ export default {
     };
   },
   props: {
-    data: Object,
+    targetMenuOnce: {
+      type: Boolean,
+      default() {
+        return false;
+      },
+    },
+    data: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
     root: Boolean,
     popStyle: Object,
     option: {
@@ -55,12 +71,19 @@ export default {
     },
   },
   mounted() {
-    if (this.root && this.hasChild && !this.rootAppendToBody) {
-      var that = this;
-      this.$nextTick(function () {
-        document.body.appendChild(that.$el);
-      });
+    if (this.targetMenuOnce && !this.rootAppendToBody) {
+      this.appendToBody();
     }
+    if (this.root && this.hasChild && !this.rootAppendToBody) {
+      this.appendToBody();
+    }
+  },
+  watch: {
+    targetMenuOnce(newValue, oldValue) {
+      if (newValue) {
+        this.appendToBody();
+      }
+    },
   },
   destroyed() {
     if (!this.isDestroy) {

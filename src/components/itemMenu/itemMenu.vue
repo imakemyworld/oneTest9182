@@ -1,7 +1,7 @@
 <template>
   <div class="custom-itemMenuDiv">
     <div v-for="child in menuData" :key="child.id" :class="getCustomItemClass(child)" :icon="changeToJSIcon(child.icon)"
-      :style="getCustomItemStyle(child)">
+      :style="getCustomItemStyle(child)" v-bindMenu="bindVue(child)">
       <div :class="getCustomItemContentClass(child)" @click="editThis($event,child)" :title="child.label">
         <span v-show="showInput(child,false)">{{child.label}}</span>
         <input type="text" class="editInput" v-if="child.editable" v-show="showInput(child,true)" v-model="child.label"
@@ -9,14 +9,17 @@
       </div>
       <div class="custom-item-cancel" v-if="child.disable !== true"><i class="el-icon-close"></i></div>
     </div>
+    <custom-menu v-if="option.targetMenu == true" :targetData="menuListObject" :option="option"
+      :popToTarget="popToTarget" :popShow="popShow" @liClick="menuClick" />
   </div>
 </template>
 
 <script>
+import customMenu from "../customNav/CustomMenu";
 export default {
   components: {
     // MenuList,
-    //menuItem,
+    "custom-menu": customMenu,
   },
   name: "itemMenu",
   props: {
@@ -27,12 +30,40 @@ export default {
   directives: {
     bindMenu: {
       // 指令的定义
-      inserted: function (el) {
-        el.focus();
+      inserted: function (el, obj) {
+        let value = obj.value.data;
+        let that = obj.value.vue;
+        el.addEventListener(
+          "mouseenter",
+          (e) => {
+            if (value.children != null) {
+              that.popToTarget = el;
+              that.popShow = true;
+              that.menuListObject = value;
+            }
+          },
+          false
+        );
+        el.addEventListener(
+          "mouseleave",
+          (e) => {
+            if (value.children != null) {
+              that.popShow = false;
+            }
+          },
+          false
+        );
       },
     },
   },
   methods: {
+    menuClick(clickData, params) {},
+    bindVue(data) {
+      return {
+        vue: this,
+        data: data,
+      };
+    },
     quitEdit(item) {
       this.$set(this.isInput, item.id, false);
     },
@@ -97,6 +128,7 @@ export default {
       this.$emit("liClick", ...args);
     },
   },
+  mounted() {},
   watch: {
     // showPop(n,o){
     //  // if (this.appendToBody) document.body.appendChild(this.popperElm);
@@ -104,6 +136,9 @@ export default {
   },
   data() {
     return {
+      popShow: false,
+      popToTarget: null,
+      menuListObject: {},
       isInput: {},
     };
   },

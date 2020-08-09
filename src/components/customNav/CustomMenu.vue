@@ -2,7 +2,8 @@
   <ul class="cu-menu" v-if="option.targetMenu != true">
     <menu-item v-for="child in menuData" :key="child.id" :data="child" :root="true" @liClick="liClick" />
   </ul>
-  <menu-item v-else :data="menuData" :option="option" :targetMenuOnce="true" :root="false" @liClick="liClick" />
+  <menu-item v-else :data="targetData" :option="option" :targetMenuOnce="true" :root="false" :popToTarget="popToTarget"
+    :popShow="popShow" @liClick="liClick" />
 </template>
 
 <script>
@@ -14,6 +15,9 @@ export default {
   name: "customMenu",
   props: {
     menuData: Array,
+    targetData: Object,
+    popToTarget: HTMLDivElement, //用于target形式菜单的显示
+    popShow: Boolean, //用于target形式菜单的显示
     option: {
       type: Object,
       default() {

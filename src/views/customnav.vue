@@ -85,10 +85,56 @@ export default {
         label: "选项4",
       },
     ];
+    let itemMenuChildrenData2 = [
+      {
+        id: "21f",
+        label: "选项1fff",
+      },
+      {
+        id: "22f",
+        label: "选项2ff",
+      },
+      {
+        id: "23f",
+        label: "选项3ff",
+        children: [
+          {
+            id: "23f",
+            label: "选项3-1ff",
+          },
+          {
+            id: "232f",
+            label: "选项3-2ffff",
+            children: [
+              {
+                id: "2321f",
+                label: "选项3-2-1fff",
+              },
+              {
+                id: "2322f",
+                label: "选项3-2-2fff",
+              },
+              {
+                id: "2323f",
+                label: "选项3-2-3ffff",
+              },
+            ],
+          },
+          {
+            id: "233f",
+            label: "选项3-3ffff",
+          },
+        ],
+      },
+      {
+        id: "24f",
+        label: "选项4",
+      },
+    ];
     return {
       opt: {
         columnNum: 3, //每行显示列数
-        useMenu: true,
+        targetMenu: true,
       },
       itemMenuData: [
         {
@@ -96,6 +142,7 @@ export default {
           label: "姓名",
           icon: "\\e7ab",
           isActive: false,
+          children: itemMenuChildrenData2,
           disable: false,
           editable: false,
         },
@@ -111,7 +158,7 @@ export default {
           id: "123",
           label: "工作地址",
           icon: "\\e77d",
-          chilren: itemMenuChildrenData,
+          children: itemMenuChildrenData,
           isActive: false,
           disable: true,
           editable: false,

@@ -6,7 +6,7 @@
       @childEnter="openMenu" @liClick="liClick" />
   </li>
   <MenuPop v-else :data="data" :root="root" :popStyle="popStyle" v-show="showPop" @childLeave="closeMenu"
-    @childEnter="openMenu" @liClick="liClick" />
+    @childEnter="openMenu" @liClick="liClick" :targetMenuOnce="targetMenuOnce" />
 </template>
 
 <script>
@@ -49,18 +49,19 @@ export default {
         that.showPop = false;
       }, openOrCloseDelay);
     },
-    showMenuList() {
+    showMenuList(obj) {
       if (!this.hasChild) {
         return;
       }
-      if (this.root) {
+      let target = obj.popTarget == null ? this.$el : obj.popTarget;
+      if (this.root || obj.popTarget) {
         //向下弹出菜单
-        this.popStyle.top = this.$el.offsetTop + this.$el.offsetHeight + "px";
-        this.popStyle.left = this.$el.offsetLeft - 3 + "px";
+        this.popStyle.top = target.offsetTop + target.offsetHeight + "px";
+        this.popStyle.left = target.offsetLeft - 3 + "px";
       } else {
         //向右弹出菜单
-        this.popStyle.top = this.$el.offsetTop + "px";
-        this.popStyle.left = this.$el.offsetLeft + this.$el.offsetWidth + "px";
+        this.popStyle.top = target.offsetTop + "px";
+        this.popStyle.left = target.offsetLeft + target.offsetWidth + "px";
       }
       this.openMenu();
     },
@@ -75,9 +76,19 @@ export default {
       }
     },
   },
+  watch: {
+    popShow(newValue, oldValue) {
+      if (newValue) {
+        this.showMenuList({ popTarget: this.popToTarget });
+      } else {
+        this.closeMenu();
+      }
+    },
+  },
   data() {
     return {
       openDelayId: 0,
+
       showPop: false,
       popStyle: {
         top: 0,
@@ -86,7 +97,14 @@ export default {
     };
   },
   props: {
-    data: Object,
+    data: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+    popToTarget: HTMLDivElement, //用于target形式菜单的显示
+    popShow: Boolean, //用于target形式菜单的显示
     option: {
       type: Object,
       default() {
