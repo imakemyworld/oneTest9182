@@ -1,0 +1,18 @@
+把menuPop 和 menuList 作为 pop菜单组件
+
+menuPop是总组件  可以重构为 popMenuList
+
+传入参数
+data 最好是array
+option {
+target ：目标dom
+
+
+}
+
+
+
+提供事件
+
+当前激活状态
+click事件
